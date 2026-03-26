@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import jwt, { sign } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
 const userschema=new Schema({
@@ -45,11 +45,11 @@ const userschema=new Schema({
     }
 },{timestamps:true})
 
-userschema.pre("save",function(){            //we use function(){} Syntex bcz we want to this access and in ()=>{} this will not provide
+userschema.pre("save",async function(){            //we use function(){} Syntex bcz we want to this access and in ()=>{} this will not provide
     
     if(!this.modeified("password")) return next()
 
-    this.password=bcrypt.hash(this.password,10)       // 10 was has rounds how many time algo will run
+    this.password= await bcrypt.hash(this.password,10)       // 10 was has rounds how many time algo will run
     next()
 })
 
@@ -58,6 +58,7 @@ userschema.methods.isPasswordCorrect=async function(password){
     return await bcrypt.compare(password,this.password)
 }
 
+const { sign } = jwt;
 userschema.methods.generateAccessToken=function () {
     return jwt.sign(
         {

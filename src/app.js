@@ -15,6 +15,22 @@ app.use(express.json({limit:"16kb"}))
 app.use(express.urlencoded({extended:true,limit:"16kb"}))   //urlencoded for url special character management
 app.use(express.static("public"))   // static use for public folder open for all  and also public was folder name not an mendatory naming co nvention
 app.use(cookieParser())   //cookieparser use for set and read cookie from user browser
+
+
+//import router
+import router from "./routes/user.routes.js"
+
+//routes declaration
+// app.use("/register",userRouter) router or controller middleware after routing hit
+
+//best practice tell api version also 
+app.use("/api/v1/users",router)
+
+//http:local8000/api/v1/user/register
+
+
+
+
 export {app}
 
 
