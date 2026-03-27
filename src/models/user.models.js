@@ -45,12 +45,10 @@ const userschema=new Schema({
     }
 },{timestamps:true})
 
-userschema.pre("save",async function(){            //we use function(){} Syntex bcz we want to this access and in ()=>{} this will not provide
-    
-    if(!this.modeified("password")) return next()
+userschema.pre("save", async function () {
+    if(!this.isModified("password")) return;
 
-    this.password= await bcrypt.hash(this.password,10)       // 10 was has rounds how many time algo will run
-    next()
+    this.password = await bcrypt.hash(this.password, 10)
 })
 
 //make new method simply add by method.m_name

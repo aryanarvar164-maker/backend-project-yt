@@ -21,21 +21,23 @@ const registerUser=asynchandler(async(req,res)=>{
     // check for user creation
     // return res
 
-    const {userName,fullName,email,password}=req.body      //data from form and json can extract from body 
-    console.log("username ",userName);
+    const {username,fullName,email,password}=req.body      //data from form and json can extract from body 
+    console.log("username ",username);
 
     // if(fullName=== ""){                                            ///we check all fields like this 
     //     throw new ApiError(400,"fullName was rewuired")
     // }
     
-    if ([userName,fullName,email,password].some((fields)=>(fields?.trim()===""))) {
+    if ([username,fullName,email,password].some((fields)=>(fields?.trim()===""))) {
         throw new ApiError(400,"all fields must compulsory")
     }
 
     const existeduser= await User.findOne({
-        $or:[{username: userName},{email}]
+        $or:[{username: username},{email}]
     })
-    if(existeduser) throw new ApiError(400,"user already exist")
+    if(existeduser){
+        throw new ApiError(400,"user already exist")
+    }
 
     // console.log("the body  :> ",res.body);
 
@@ -59,7 +61,7 @@ const registerUser=asynchandler(async(req,res)=>{
         coverImage:coverImage?.url || "",
         email,
         password,
-        userName : userName.toLowerCase()
+        username : username.toLowerCase()
     })
 
     const createdUser = await User.findById(user._id).select("-password -refreshToken")      //this select syntex add in string by -name who dont add
