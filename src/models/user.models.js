@@ -3,20 +3,20 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
 const userschema=new Schema({
-    watchHistory:[
-        {
-            type:mongoose.Types.ObjectId,
-            ref:"Video",
-        }
-    ],
-    username:{
-        type:String,
-        unique:true,
-        required:true,
-        lowercase:true,
-        trim:true,
-        index:true,     //for optimized searching enable index
-    },
+    // watchHistory:[
+    //     {
+    //         type:mongoose.Types.ObjectId,
+    //         ref:"Video",
+    //     }
+    // ],
+    // username:{
+    //     type:String,
+    //     unique:true,
+    //     required:true,
+    //     lowercase:true,
+    //     trim:true,
+    //     index:true,     //for optimized searching enable index
+    // },
     email:{
         type:String,
         unique:true,
@@ -29,13 +29,25 @@ const userschema=new Schema({
         required:true,
         index:true
     },
-    avatar:{
-        type:String,  //cloudnary 3rd party for url
-        required:true,
+    // avatar:{
+    //     type:String,  //cloudnary 3rd party for url
+    //     required:true,
+    // },
+    // coverImage:{
+    //     type:String,
+    // },
+    status:{
+        type: Boolean,
+        default:true,
+        required:true
     },
-    coverImage:{
-        type:String,
+
+    role_id:{
+        //TODO: add ref role_id from role model
+        // type: String,
+        // required:true,
     },
+
     password:{
         type:String,
         required:[true,"pass was required"],
@@ -62,7 +74,6 @@ userschema.methods.generateAccessToken=function () {
         {
             _id:this._id,
             email:this.email,
-            username:this.username,
             fullName:this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
